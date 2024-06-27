@@ -2,11 +2,14 @@
 {% load special_plural %}
 
 {% block box_title %}
+    <div class="am-title-row">
         {% if data.title %}
             <h1>{{data.title}}</h1>
         {% else %}
-            {% if come_from_admin %} {{ data.document|special_plural|capfirst}} list {% else %} My {{data.document|special_plural}} {% endif %}
+            {% if come_from_admin %}{{ data.document|special_plural|capfirst}} list{% else %}My {{data.document|special_plural}}{% endif %}
         {% endif %}
+        {% if data.user_data %}<span class="am-count-badge">{{ data.number_total }} {{data.document|special_plural}}</span>{% endif %}
+    </div>
 {% endblock %}
 
 
@@ -26,10 +29,6 @@
 
 
 {% block box_body %}
-{% if data.user_data %}
-    Total number of {{data.document|special_plural}}: {{ data.number_total }}
-{% endif %}
-
 {% if data.menu and not data.title %}
 <div class="dropdown" id="id_actions" style="display:none">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" {% if BOOTSTRAP_VERSION|first == "4" %}data-toggle{% elif BOOTSTRAP_VERSION|first == "5"  %}data-bs-toggle{% endif %}="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -38,7 +37,7 @@
     </button>
     <ul class="dropdown-menu">
         {% for value, text in data.action_form.fields.actions.choices %}
-            <li style="cursor:  pointer;" onclick="action_dashboard({{value}});">{{text}}</li>
+            <li style="cursor: pointer;" onclick="action_dashboard({{value}});">{% if value == "1" %}<i class="fas fa-trash"></i>{% elif value == "2" %}<i class="fas fa-user-circle"></i>{% elif value == "3" %}<i class="fas fa-folder"></i>{% endif %}{{text}}</li>
         {% endfor %}
     </ul>
 </div>
